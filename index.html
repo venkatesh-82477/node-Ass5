@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Ass5</title>
+    <link rel="stylesheet" href="./index.css">
+    <script>
+        const name =prompt("please enter your name")
+    </script>
+</head>
+<body>
+    <div id="intro">
+        <h1>Sample chat room implementation through socket.io</h1>
+    </div>
+    <ul id="messages"></ul>
+    <form action="">
+        <input type="text" id="msg" placeholder="Enter your message...." autocomplete="off" required>
+        <button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        const socket = io();
+        socket.emit("joining chat",name);
+        $("form").submit(function(e){
+            e.preventDefault();
+            socket.emit('chat message',(name + ": " + $("#msg").val()));
+            $('message').append($('<li id="list">').text("you: " + $('#msg').val()));
+                $('#msg').val('');
+                return false ;
+        });
+        socket.on('chat message',function(msgs){
+            $('#messages').append($('<li>').text(msgs));
+        })
+    </script>
+</body>
+</html>
